@@ -31,10 +31,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         return http.csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults()) // ✅ Enable CORS
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/auth/**")
-                        .permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()
+                )
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
