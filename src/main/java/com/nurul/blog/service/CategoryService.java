@@ -5,6 +5,7 @@ import com.nurul.blog.repository.CategoryRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -22,7 +23,7 @@ public class CategoryService {
     }
 
     public List<Category> getAll() {
-        return categoryRepository.findAll();
+        return categoryRepository.findAll(Sort.by(Sort.Direction.DESC,"id"));
     }
 
     public Optional<Category> getById(Integer id) {
