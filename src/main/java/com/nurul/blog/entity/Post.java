@@ -104,4 +104,18 @@ public class Post {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", category=" + category +
+                ", user=" + user +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", author='" + author + '\'' +
+                ", filePath='" + filePath + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }
