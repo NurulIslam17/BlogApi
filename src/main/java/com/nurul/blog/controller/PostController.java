@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/post")
-
+@CrossOrigin
 public class PostController {
 
     @Autowired
@@ -40,12 +40,12 @@ public class PostController {
         try
         {
             ObjectMapper objectMapper = new ObjectMapper();
-            Post post = objectMapper.readValue(postJson,Post.class);
-            postService.storePost(post,file);
-            return new ResponseEntity<>("Post stored successfully",HttpStatus.OK);
+            Post post = objectMapper.readValue(postJson, Post.class);
+            postService.storePost(post, file);
+            return new ResponseEntity<>("Post stored successfully", HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>("Something went wrong"+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Something went wrong" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
