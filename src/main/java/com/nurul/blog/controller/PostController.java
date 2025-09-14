@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/post")
@@ -30,15 +31,13 @@ public class PostController {
             }
             return new ResponseEntity<>(posts, HttpStatus.OK);
         } catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_GATEWAY);
         }
     }
 
     @PostMapping("")
-    public ResponseEntity<String> savePost(@RequestPart("file") MultipartFile file, @RequestPart("post") String postJson)
-    {
-        try
-        {
+    public ResponseEntity<String> savePost(@RequestPart("file") MultipartFile file, @RequestPart("post") String postJson) {
+        try {
             ObjectMapper objectMapper = new ObjectMapper();
             Post post = objectMapper.readValue(postJson, Post.class);
             postService.storePost(post, file);
@@ -46,6 +45,32 @@ public class PostController {
 
         } catch (Exception e) {
             return new ResponseEntity<>("Something went wrong" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable Integer id) {
+        try {
+            System.out.println("Post details for : "+id);
+            Optional<Post> post = postService.getById(id);
+            // System.out.println(post);
+            if (post.isPresent()) {
+                return new ResponseEntity<>(post, HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Post Not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<?> savePost(@RequestBody Post post) {
+        try {
+            System.out.println(post);
+            return new ResponseEntity<>("Created successfully", HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
