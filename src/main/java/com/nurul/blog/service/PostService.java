@@ -54,7 +54,21 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public Optional<Post> getById(Integer id) {
-        return postRepository.findById(id);
+    public Optional<PostDto> getById(Integer id) {
+        Optional<Post> post = postRepository.findById(id);
+        return post.map(p -> {
+            PostDto dto = new PostDto();
+            dto.setId(p.getId());
+            dto.setTitle(p.getTitle());
+            dto.setDescription(p.getDescription());
+            dto.setAuthor(p.getAuthor());
+            dto.setFilePath(p.getFilePath());
+            dto.setStatus(p.getStatus().name());
+            dto.setCategoryId(p.getCategory().getId());
+            dto.setCategoryName(p.getCategory().getName());
+            dto.setUserId(p.getUser().getId());
+            dto.setUserName(p.getUser().getName());
+            return dto;
+        });
     }
 }
