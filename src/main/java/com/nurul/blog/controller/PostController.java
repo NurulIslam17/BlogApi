@@ -51,9 +51,7 @@ public class PostController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Integer id) {
         try {
-            System.out.println("Post details for : "+id);
-            Optional<Post> post = postService.getById(id);
-            // System.out.println(post);
+            Optional<PostDto> post = postService.getById(id);
             if (post.isPresent()) {
                 return new ResponseEntity<>(post, HttpStatus.OK);
             }

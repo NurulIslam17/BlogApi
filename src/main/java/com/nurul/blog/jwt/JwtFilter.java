@@ -36,7 +36,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = null;
         String name = null;
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        if (authHeader != null && authHeader.startsWith("Bearer")) {
             token = authHeader.substring(7); // Remove 'Bearer ' prefix
 
             // Check blacklist

@@ -76,18 +76,6 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     private Date verifiedAt;
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", posts=" + posts +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", verifiedAt=" + verifiedAt +
-                '}';
-    }
-
     // Automatically set verifiedAt when saving
     @PrePersist
     protected void onCreate() {
