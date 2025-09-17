@@ -63,10 +63,9 @@ public class PostController {
 
     @PostMapping("/save")
     public ResponseEntity<?> savePost(@RequestBody Post post) {
+        System.out.println("Post Request Data : " + post);
         try {
-            System.out.println(post);
-            return new ResponseEntity<>("Created successfully", HttpStatus.OK);
-
+            return new ResponseEntity<>(post, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
