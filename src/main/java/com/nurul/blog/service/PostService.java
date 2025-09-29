@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class PostService {
@@ -21,8 +22,13 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
-    @Value("src/main/resources/static/images")
-    private String uploadDir;
+//    @Value("src/main/resources/static/images")
+//    private String uploadDir;
+
+
+    private final String uploadDir = "uploads/";
+
+
 
     public List<PostDto> getAlPosts()
     {
@@ -70,5 +76,26 @@ public class PostService {
             dto.setUserName(p.getUser().getName());
             return dto;
         });
+    }
+
+    public Post create(Post post, MultipartFile file) throws IOException {
+
+        if (file != null && !file.isEmpty()) {
+            String fileNme = saveImage(file);
+            post.setFilePath(fileNme);
+        }
+        return postRepository.save(post);
+    }
+
+    private String saveImage(MultipartFile file) throws IOException {
+
+        String fileName = UUID.randomUUID()+"_"+file.getOriginalFilename();
+
+        System.out.println(fileName);
+        Path path = Paths.get(uploadDir+fileName);
+        Files.createDirectories(path.getParent());
+        Files.write(path, file.getBytes());
+
+        return  fileName;
     }
 }

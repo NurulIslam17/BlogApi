@@ -3,7 +3,9 @@ package com.nurul.blog.controller;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nurul.blog.DTO.PostDto;
+import com.nurul.blog.entity.Category;
 import com.nurul.blog.entity.Post;
+import com.nurul.blog.entity.User;
 import com.nurul.blog.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,10 +64,32 @@ public class PostController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> savePost(@RequestBody Post post) {
-        System.out.println("Post Request Data : " + post);
+    public ResponseEntity<?> savePost(@RequestParam("title") String title,
+                                      @RequestParam("author") String author,
+                                      @RequestParam("description") String description,
+                                      @RequestParam("status") String status,
+                                      @RequestParam("category_id") Integer category_id,
+                                      @RequestParam("user_id") Long user_id,
+                                      @RequestParam(value = "file", required = false) MultipartFile file) {
         try {
-            return new ResponseEntity<>(post, HttpStatus.OK);
+
+
+            System.out.println(file);
+            Post post = new Post();
+            post.setTitle(title);
+            post.setAuthor(author);
+            post.setDescription(description);
+            post.setStatus(Post.Status.valueOf(status));
+
+            Category category = new Category();
+            category.setId(category_id);
+            post.setCategory(category);
+            User user = new User();
+            user.setId(user_id);
+            post.setUser(user);
+
+            Post saved = postService.create(post, file);
+            return new ResponseEntity<>(saved, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
