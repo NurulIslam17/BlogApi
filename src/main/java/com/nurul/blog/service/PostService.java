@@ -89,7 +89,7 @@ public class PostService {
 
     private String saveImage(MultipartFile file) throws IOException {
 
-        String fileName = UUID.randomUUID()+"_"+file.getOriginalFilename();
+        String fileName = System.currentTimeMillis()+"_"+file.getOriginalFilename();
 
         System.out.println(fileName);
         Path path = Paths.get(uploadDir+fileName);

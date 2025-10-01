@@ -13,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -27,11 +29,14 @@ public class PostController {
     @GetMapping("")
     public ResponseEntity<?> getAllPosts() {
         try {
+
             List<PostDto> posts = postService.getAlPosts();
+            Map<String, List<PostDto>> response = new HashMap<>();
+            response.put("data", posts);
             if (posts.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(posts, HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_GATEWAY);
         }
