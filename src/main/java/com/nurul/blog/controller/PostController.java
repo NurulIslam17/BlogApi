@@ -1,15 +1,16 @@
 package com.nurul.blog.controller;
 
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nurul.blog.DTO.PostDto;
 import com.nurul.blog.entity.Category;
 import com.nurul.blog.entity.Post;
 import com.nurul.blog.entity.User;
+import com.nurul.blog.service.MailService;
 import com.nurul.blog.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +26,9 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+
+//    @Autowired
+//    private MailService mailService;
 
     @GetMapping("")
     public ResponseEntity<?> getAllPosts() {
@@ -77,9 +81,6 @@ public class PostController {
                                       @RequestParam("user_id") Long user_id,
                                       @RequestParam(value = "file", required = false) MultipartFile file) {
         try {
-
-
-            System.out.println(file);
             Post post = new Post();
             post.setTitle(title);
             post.setAuthor(author);
@@ -94,6 +95,16 @@ public class PostController {
             post.setUser(user);
 
             Post saved = postService.create(post, file);
+//
+//            try {
+//                mailService.sendMail(
+//                        "nurulcse09@gmail.com",
+//                        "New Post Created",
+//                        "A new post titled '" + title + "' has been created."
+//                );
+//            } catch (MailException e) {
+//                System.err.println("Failed to send email: " + e.getMessage());
+//            }
             return new ResponseEntity<>(saved, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
