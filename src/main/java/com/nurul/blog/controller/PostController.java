@@ -27,8 +27,8 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-//    @Autowired
-//    private MailService mailService;
+    @Autowired
+    private MailService mailService;
 
     @GetMapping("")
     public ResponseEntity<?> getAllPosts() {
@@ -95,16 +95,16 @@ public class PostController {
             post.setUser(user);
 
             Post saved = postService.create(post, file);
-//
-//            try {
-//                mailService.sendMail(
-//                        "nurulcse09@gmail.com",
-//                        "New Post Created",
-//                        "A new post titled '" + title + "' has been created."
-//                );
-//            } catch (MailException e) {
-//                System.err.println("Failed to send email: " + e.getMessage());
-//            }
+
+            try {
+                mailService.sendMail(
+                        "nurulcse09@gmail.com",
+                        "New Post Created",
+                        "A new post titled '" + title + "' has been created."
+                );
+            } catch (MailException e) {
+                System.err.println("Failed to send email: " + e.getMessage());
+            }
             return new ResponseEntity<>(saved, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
