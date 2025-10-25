@@ -98,4 +98,10 @@ public class PostService {
 
         return  fileName;
     }
+
+    public void importPost() {
+
+        System.out.println("Okk");
+        return;
+    }
 }

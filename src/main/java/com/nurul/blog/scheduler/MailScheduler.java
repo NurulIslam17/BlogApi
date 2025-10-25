@@ -12,7 +12,7 @@ public class MailScheduler {
     @Autowired
     private MailService mailService;
 
-    @Scheduled(cron = "0 0 9 * * *")
+    @Scheduled(cron = "0 30 21 * * *")
     public  void sendCronEmail()
     {
         mailService.sendMail(

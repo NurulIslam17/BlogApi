@@ -7,7 +7,9 @@ import com.nurul.blog.entity.Post;
 import com.nurul.blog.entity.User;
 import com.nurul.blog.service.MailService;
 import com.nurul.blog.service.PostService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
@@ -51,7 +53,7 @@ public class PostController {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             Post post = objectMapper.readValue(postJson, Post.class);
-            postService.storePost(post, file);
+            postService.storePost(post, file); 
             return new ResponseEntity<>("Post stored successfully", HttpStatus.OK);
 
         } catch (Exception e) {
@@ -73,7 +75,7 @@ public class PostController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> savePost(@RequestParam("title") String title,
+    public ResponseEntity<?> savePost(@Valid @RequestParam("title") String title,
                                       @RequestParam("author") String author,
                                       @RequestParam("description") String description,
                                       @RequestParam("status") String status,
@@ -81,7 +83,7 @@ public class PostController {
                                       @RequestParam("user_id") Long user_id,
                                       @RequestParam(value = "file", required = false) MultipartFile file) {
         try {
-            Post post = new Post();
+            Post post = new Post(); 
             post.setTitle(title);
             post.setAuthor(author);
             post.setDescription(description);
@@ -107,6 +109,16 @@ public class PostController {
             }
             return new ResponseEntity<>(saved, HttpStatus.OK);
         } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/import")
+    public ResponseEntity<?> importPost() {
+        try {
+             postService.importPost();
+            return new ResponseEntity<>("Ok", HttpStatus.OK);
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -3,6 +3,9 @@ package com.nurul.blog.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import org.springframework.lang.NonNull;
 
 import java.util.List;
 
@@ -32,6 +35,8 @@ public class Post {
     private User user;
 
     @Column(nullable = false, length = 150)
+    @NotBlank(message = "Title is required")
+    @Size(min = 5,message = "Title sould be more than 5 character.")
     private String title;
     @Column(columnDefinition = "TEXT")
     private String description;
