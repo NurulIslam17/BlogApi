@@ -33,10 +33,9 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
     @Column(nullable = false, length = 150)
     @NotBlank(message = "Title is required")
-    @Size(min = 5,message = "Title sould be more than 5 character.")
+    @Size(min = 5, message = "Title sould be more than 5 character.")
     private String title;
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -44,14 +43,20 @@ public class Post {
     private String author;
     @Column(length = 255)
     private String filePath;
+    @Column(columnDefinition = "TEXT")
+    private String remark;
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20, columnDefinition = "VARCHAR(20) DEFAULT 'PUBLISHED'")
+    @Column(
+            name = "status",
+            nullable = false,
+            columnDefinition = "ENUM('PENDING', 'PUBLISHED', 'UNPUBLISHED', 'TRASHED') DEFAULT 'PUBLISHED'"
+    )
     private Post.Status status = Post.Status.PENDING; // Default
 
 
     // Enum for status
     public enum Status {
-        PENDING, PUBLISHED, UNPUBLISHED
+        PENDING, PUBLISHED, UNPUBLISHED, TRASHED
     }
 
     public String getAuthor() {
@@ -100,6 +105,13 @@ public class Post {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public Status getStatus() {

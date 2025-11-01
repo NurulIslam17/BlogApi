@@ -74,6 +74,16 @@ public class PostController {
         }
     }
 
+    @PostMapping("/trash/{id}")
+    public ResponseEntity<?> trashedById(@PathVariable Integer id) {
+        try {
+            postService.trashedById(id);
+            return new ResponseEntity<>("Record in trashed.", HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/save")
     public ResponseEntity<?> savePost(@Valid @RequestParam("title") String title,
                                       @RequestParam("author") String author,

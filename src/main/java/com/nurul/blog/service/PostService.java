@@ -22,6 +22,9 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private  MailService mailService;
+
 //    @Value("src/main/resources/static/images")
 //    private String uploadDir;
 
@@ -103,5 +106,26 @@ public class PostService {
 
         System.out.println("Okk");
         return;
+    }
+
+    public void trashedById(Integer id) {
+        Optional<Post> oldPost = postRepository.findById(id);
+        if (oldPost.isPresent()) {
+            Post post = oldPost.get();
+            post.setStatus(Post.Status.TRASHED);
+            postRepository.save(post);
+            System.out.println("Trashed");
+            try {
+                mailService.sendMail(
+                        "nurulcse09@gmail.com",
+                        "New Post Stored in Trash",
+                        "A new post titled '" + post.getTitle() + "' has been stored in trash. Take Action to Delete It or Not."
+                );
+            } catch (RuntimeException e) {
+                throw new RuntimeException("Failed to send email: " + e.getMessage());
+            }
+        } else {
+            throw new RuntimeException("Post not found with ID: " + id);
+        }
     }
 }
