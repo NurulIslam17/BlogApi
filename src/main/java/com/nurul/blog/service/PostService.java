@@ -128,4 +128,9 @@ public class PostService {
             throw new RuntimeException("Post not found with ID: " + id);
         }
     }
+
+    public Post findByStatus(Post.Status status) {
+        return postRepository.findByStatus(status);
+    }
+
 }

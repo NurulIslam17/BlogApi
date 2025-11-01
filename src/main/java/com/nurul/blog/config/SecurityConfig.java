@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults()) // Enable CORS
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/post/status={status}").permitAll()
                         .requestMatchers("/api/**").authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

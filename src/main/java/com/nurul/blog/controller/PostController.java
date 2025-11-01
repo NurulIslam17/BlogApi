@@ -84,6 +84,17 @@ public class PostController {
         }
     }
 
+    @GetMapping("/status/{status}")
+    public ResponseEntity<?> findByStatus(@PathVariable("status") Post.Status status) {
+        System.out.println(status);
+        try {
+            Post posts = postService.findByStatus(status);
+            return new ResponseEntity<>(posts, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/save")
     public ResponseEntity<?> savePost(@Valid @RequestParam("title") String title,
                                       @RequestParam("author") String author,
